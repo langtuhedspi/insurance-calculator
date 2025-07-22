@@ -227,23 +227,20 @@ function calculatePremiumTamBinh(age, program, years) {
     return total;
 }
 
-function calculatePremiumSpk(age, years) {
-    let total = 0;
-    for (let i = 0; i < years; i++) {
-        const fee = spkPremiums[age + i];
-        if (fee) total += fee;
-    }
-    return total;
-}
+// function calculatePremiumSpk(age, years) {
+//     let total = 0;
+//     for (let i = 0; i < years; i++) {
+//         const fee = spkPremiums[age + i];
+//         if (fee) total += fee;
+//     }
+//     return total;
+// }
 
 function calculateTotal() {
     const age = parseInt(document.getElementById("age").value);
     const group = parseInt(document.getElementById("jobGroup").value);
-    //const r21Amount = parseInt(document.getElementById("r21_amount").value);
     const r21Years = parseInt(document.getElementById("r21_years").value);
-    //const r22Amount = parseInt(document.getElementById("r22_amount").value);
     const r22Years = parseInt(document.getElementById("r22_years").value);
-    //const r23Amount = parseInt(document.getElementById("r23_amount").value);
     const r23Years = parseInt(document.getElementById("r23_years").value);
     const r21Amount = getNumberValue("r21_amount");
     const r22Amount = getNumberValue("r22_amount");
@@ -252,7 +249,7 @@ function calculateTotal() {
     const angiaYears = parseInt(document.getElementById("angia_years").value);
     const tambinhProgram = document.getElementById("tambinh_program").value; 
     const tambinhYears = parseInt(document.getElementById("tambinh_years").value);
-    const spkYears = parseInt(document.getElementById("spk_years").value);      
+    // const spkYears = parseInt(document.getElementById("spk_years").value);      
 
     // R21
     let r21Total = 0;
@@ -317,17 +314,17 @@ function calculateTotal() {
         document.getElementById("tambinh_total").innerText = tambinhTotal.toLocaleString();
     }
 
-    // San pham khac
-    const spkTotal = calculatePremiumSpk(age, spkYears);
-    if (spkTotal == 0) {
-        document.getElementById("spk_total").innerText = "#";
-        document.getElementById("spk_note").innerText = "";
-    } else {
-        document.getElementById("spk_note").innerText = "";
-        document.getElementById("spk_total").innerText = spkTotal.toLocaleString();
-    }
+    // // San pham khac
+    // const spkTotal = calculatePremiumSpk(age, spkYears);
+    // if (spkTotal == 0) {
+    //     document.getElementById("spk_total").innerText = "#";
+    //     document.getElementById("spk_note").innerText = "";
+    // } else {
+    //     document.getElementById("spk_note").innerText = "";
+    //     document.getElementById("spk_total").innerText = spkTotal.toLocaleString();
+    // }
 
-    const total = (r21Total || 0) + (r22Total || 0) + (r23Total || 0) + angiaTotal + tambinhTotal + spkTotal;
+    const total = (r21Total || 0) + (r22Total || 0) + (r23Total || 0) + angiaTotal + tambinhTotal;
     document.getElementById("total").innerText = total.toLocaleString();
 }
 
