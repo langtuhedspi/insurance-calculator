@@ -206,6 +206,11 @@ function calculatePremiumR23(age, group, amount, years) {
 
 function calculatePremiumAnGia(age, rank, years) {
     let total = 0;
+    if (age === 0) {
+        if (rank === 'dong' || rank === 'bac' || rank === 'vang') {
+            return null;
+        }
+    }
     for (let i = 0; i < years; i++) {
         const fee = angiaPremiums[age + i]?.[rank] ?? 0
         if (fee) total += fee;
@@ -252,7 +257,7 @@ function calculateTotal() {
     // R21
     let r21Total = 0;
     if (age < 18 || age > 74) {
-        document.getElementById("r21_total").innerText = "N/A";
+        document.getElementById("r21_total").innerText = "#";
         document.getElementById("r21_note").innerText = "※ Độ tuổi không được bảo hiểm";
     } else if (!r21Amount || !r21Years) {
         document.getElementById("r21_total").innerText = "#";
@@ -266,7 +271,7 @@ function calculateTotal() {
     // R22
     const r22Total = calculatePremiumR22(group, r22Amount, r22Years);
     if (r22Total === null) {
-        document.getElementById("r22_total").innerText = "N/A";
+        document.getElementById("r22_total").innerText = "#";
         document.getElementById("r22_note").innerText = "※ Nhóm nghề không được bảo hiểm";
     } else if (!r22Amount || !r22Years) {
         document.getElementById("r22_total").innerText = "#";
@@ -279,7 +284,7 @@ function calculateTotal() {
     // R23
     const r23Total = calculatePremiumR23(age, group, r23Amount, r23Years);
     if (r23Total === null) {
-        document.getElementById("r23_total").innerText = "N/A";
+        document.getElementById("r23_total").innerText = "#";
         document.getElementById("r23_note").innerText = "※ Nhóm nghề không được bảo hiểm";
     } else if (!r23Amount || !r23Years) {
         document.getElementById("r23_total").innerText = "#";
@@ -291,7 +296,10 @@ function calculateTotal() {
 
     // An Gia
     const angiaTotal = calculatePremiumAnGia(age, angiaProgram, angiaYears)
-    if (angiaTotal == 0) {
+    if (angiaTotal === null) {
+        document.getElementById("angia_total").innerText = "#";
+        document.getElementById("angia_note").innerText = "※ Độ tuổi không được bảo hiểm";
+    } else if (angiaTotal === 0) {
         document.getElementById("angia_total").innerText = "#";
         document.getElementById("angia_note").innerText = "";
     } else {
