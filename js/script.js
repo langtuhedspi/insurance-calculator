@@ -1,15 +1,26 @@
-const r21Table = {
-          18: 51200, 19: 54200, 20: 57000, 21: 60200, 22: 65200, 23: 72500,
-          24: 80000, 25: 89000, 26: 98500, 27: 108500, 28: 119200, 29: 130200,
-          30: 142700, 31: 156200, 32: 174500, 33: 199200, 34: 227200, 35: 258700,
-          36: 290900, 37: 308300, 38: 321600, 39: 368700, 40: 422200, 41: 477000,
-          42: 529300, 43: 587600, 44: 654500, 45: 731500, 46: 818000, 47: 912800,
-          48: 1010700, 49: 1104300, 50: 1190300, 51: 1310600, 52: 1409900, 53: 1481700,
-          54: 1559600, 55: 1641700, 56: 1725700, 57: 1848800, 58: 2020100, 59: 2211300,
-          60: 2421600, 61: 2648700, 62: 2862300, 63: 3050000, 64: 3242600, 65: 3442600,
-          66: 3647700, 67: 3908700, 68: 4203200, 69: 4451900, 70: 4843300, 71: 5295600,
-          72: 5666300, 73: 6062900, 74: 6487300
-        };
+const r21TableMale = {
+    18: 51200, 19: 54200, 20: 57000, 21: 60200, 22: 65200, 23: 72500,
+    24: 80000, 25: 89000, 26: 98500, 27: 108500, 28: 119200, 29: 130200,
+    30: 142700, 31: 156200, 32: 174500, 33: 199200, 34: 227200, 35: 258700,
+    36: 290900, 37: 308300, 38: 321600, 39: 368700, 40: 422200, 41: 477000,
+    42: 529300, 43: 587600, 44: 654500, 45: 731500, 46: 818000, 47: 912800,
+    48: 1010700, 49: 1104300, 50: 1190300, 51: 1310600, 52: 1409900, 53: 1481700,
+    54: 1559600, 55: 1641700, 56: 1725700, 57: 1848800, 58: 2020100, 59: 2211300,
+    60: 2421600, 61: 2648700, 62: 2862300, 63: 3050000, 64: 3242600, 65: 3442600,
+    66: 3647700, 67: 3908700, 68: 4203200, 69: 4451900, 70: 4843300, 71: 5295600,
+    72: 5666300, 73: 6062900, 74: 6487300
+};
+
+const r21TableFemale = {
+    18: 41700, 19: 46500, 20: 52200,21: 58500,22: 60500,23: 66500,24: 73500,
+    25: 81000,26: 89500,27: 99200,28: 111500,29: 125000,30: 140700,31: 158500,
+    32: 176200,33: 193700,34: 212500,35: 233700,36: 256700,37: 285000,38: 316100,
+    39: 347000,40: 390700,41: 436700,42: 474300,43: 510500,44: 549000,45: 589300,
+    46: 630600,47: 673100,48: 717100,49: 763300,50: 810400,51: 857000,52: 901700,
+    53: 944200,54: 992200,55: 1040300,56: 1087000,57: 1133500,58: 1174700,59: 1232900,
+    60: 1286800,61: 1338700,62: 1389800,63: 1441200,64: 1494800,65: 1545600,66: 1584400,
+    67: 1624200,68: 1665000,69: 1706800,70: 1848800,71: 2039000,72: 2257000,73: 2415000,74: 2584000
+};
 
 const r23Table = {
           1: 21600, 2: 32400, 3: 43200, 4: 54000, 5: 54000, 6: 54000, 7: 54000,
@@ -176,14 +187,16 @@ const tambinhPremiums = {
 const rateR22 = { 1: 1, 2: 1.3, 3: 1.9, 4: 2.5 };
 const rateR23 = { 1: 1, 2: 1.3, 3: 1.9, 4: 2.5, 5: 3.5 };
 
-function calculatePremiumR21(age, amount, years) {
-          let total = 0;
-          for (let i = 0; i < years; i++) {
-            const fee = r21Table[age + i];
-            if (fee) total += fee;
-          }
-          return (total * amount) / 100000000;
-        }
+function calculatePremiumR21(age, gender, amount, years) {
+    let total = 0;
+    let r21Table = gender == 'male' ? r21TableMale : r21TableFemale;
+
+    for (let i = 0; i < years; i++) {
+        const fee = r21Table[age + i];
+        if (fee) total += fee;
+    }
+    return (total * amount) / 100000000;
+}
 
 function calculatePremiumR22(group, amount, years) {
           if (group === 5 || group === 6) return null;
@@ -239,6 +252,7 @@ function calculatePremiumTamBinh(age, program, years) {
 function calculateTotal() {
     const age = parseInt(document.getElementById("age").value);
     const group = parseInt(document.getElementById("jobGroup").value);
+    const gender = document.getElementById("gender").value; 
     const r21Years = parseInt(document.getElementById("r21_years").value);
     const r22Years = parseInt(document.getElementById("r22_years").value);
     const r23Years = parseInt(document.getElementById("r23_years").value);
@@ -256,12 +270,12 @@ function calculateTotal() {
     if (age < 18 || age > 74) {
         document.getElementById("r21_total").innerText = "#";
         document.getElementById("r21_note").innerText = "※ Độ tuổi không được bảo hiểm";
-    } else if (!r21Amount || !r21Years) {
+    } else if (!r21Amount || !r21Years || gender === '') {
         document.getElementById("r21_total").innerText = "#";
         document.getElementById("r21_note").innerText = "";
     } else {
         document.getElementById("r21_note").innerText = "";
-        r21Total = calculatePremiumR21(age, r21Amount, r21Years);
+        r21Total = calculatePremiumR21(age, gender, r21Amount, r21Years);
         document.getElementById("r21_total").innerText = r21Total.toLocaleString();
     }
 
@@ -343,6 +357,7 @@ document.querySelectorAll(".amount-input").forEach((el) => {
         });
         });
 
+document.getElementById("gender").addEventListener("change", calculateTotal);
 document.getElementById("angia_program").addEventListener("change", calculateTotal);
 document.getElementById("tambinh_program").addEventListener("change", calculateTotal);
 
